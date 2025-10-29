@@ -1,6 +1,7 @@
 import { Sprite } from './Classes/Sprite.js';
 import { Player } from './Classes/Player.js';
 import { Projectile } from './Classes/Projectile.js';
+import { Heart } from './Classes/Heart.js';
 
 // Canvas
 const canvas = document.querySelector('canvas');
@@ -55,6 +56,13 @@ const background = new Sprite({ position: { x: 0, y: 0 }, imageSrc: './img/mapa1
 // Teclas
 const keys = { a: false, d: false };
 
+
+// Vida
+const hearts = [
+  new Heart({ x: 10, y: 10, width: 32, height: 32 }),
+  new Heart({ x: 50, y: 10, width: 32, height: 32 }),
+  new Heart({ x: 90, y: 10, width: 32, height: 32 }),
+]
 
 const projectiles = []; // Array para guardar os projéteis
 let lastDirection = 'right'; // Para saber para onde atirar
@@ -132,6 +140,12 @@ function animate() {
   // Atualiza e desenha o player
   atualizarPlayer();
   player.draw();
+
+  // Desenhar coração
+ for (let i = hearts.length - 1; i >= 0; i--) {
+    const heart = hearts[i]
+    heart.draw(c)
+  }
 }
 
 animate();
