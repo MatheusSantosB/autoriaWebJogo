@@ -44,8 +44,8 @@ const blocosColisao = dadosColisao.map(d => new Colisao(d));
 
 // Jogador
 const player = new Player({ x: 50, y: 50 });
-player.width = 50;
-player.height = 50;
+player.width = 75;
+player.height = 100;
 player.velocidade = { x: 0, y: 1 };
 
 // Background
