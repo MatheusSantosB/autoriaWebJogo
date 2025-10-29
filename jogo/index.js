@@ -1,5 +1,6 @@
 import { Sprite } from './Classes/Sprite.js';
 import { Player } from './Classes/Player.js';
+import { Projectile } from './Classes/Projectile.js';
 
 // Canvas
 const canvas = document.querySelector('canvas');
@@ -34,7 +35,7 @@ class Colisao {
     this.height = height;
   }
 
-  draw() {
+  draw() { // Desenhar bloco de colisão
     c.fillStyle = 'rgba(0,0,255,0.3)';
     c.fillRect(this.x, this.y, this.width, this.height);
   }
@@ -53,6 +54,10 @@ const background = new Sprite({ position: { x: 0, y: 0 }, imageSrc: './img/mapa1
 
 // Teclas
 const keys = { a: false, d: false };
+
+
+const projectiles = []; // Array para guardar os projéteis
+let lastDirection = 'right'; // Para saber para onde atirar
 
 // Função de atualização do player com colisão
 function atualizarPlayer() {
@@ -105,8 +110,24 @@ function animate() {
     c.drawImage(background.image, 0, 0);
   }
 
-  // Desenha as colisões
+  // Desenha as colisões (opcional, pode comentar esta linha)
   blocosColisao.forEach(bloco => bloco.draw());
+
+  // --- ATUALIZAÇÃO DOS PROJÉTEIS ---
+  projectiles.forEach((projectile, index) => {
+    projectile.update();
+
+    // Remover projéteis que saem da tela
+    if (
+      projectile.position.x + projectile.width < 0 ||
+      projectile.position.x > canvas.width
+    ) {
+      setTimeout(() => {
+        projectiles.splice(index, 1);
+      }, 0);
+    }
+  });
+  // ---------------------------------
 
   // Atualiza e desenha o player
   atualizarPlayer();
@@ -120,6 +141,25 @@ window.addEventListener('keydown', (e) => {
   if (e.key === 'a') keys.a = true;
   if (e.key === 'd') keys.d = true;
   if (e.key === 'w' && player.velocidade.y === 0) player.velocidade.y = -15;
+
+  // --- LÓGICA DE ATIRAR ---
+  if (e.key === ' ') { // Barra de espaço
+    const projectileVelocity = (lastDirection === 'right') ? 10 : -10;
+    
+    projectiles.push(
+      new Projectile({
+        position: {
+          x: player.position.x + player.width / 2 - 10,
+          y: player.position.y + player.height / 2 - 2.5
+        },
+        velocity: {
+          x: projectileVelocity,
+          y: 0
+        }
+      })
+    );
+  }
+  // -------------------------
 });
 
 window.addEventListener('keyup', (e) => {
@@ -130,6 +170,12 @@ window.addEventListener('keyup', (e) => {
 // Atualiza velocidade horizontal com base nas teclas
 setInterval(() => {
   player.velocidade.x = 0;
-  if (keys.a) player.velocidade.x = -5;
-  if (keys.d) player.velocidade.x = 5;
+  if (keys.a) {
+    player.velocidade.x = -5;
+    lastDirection = 'left'; // ATUALIZA DIREÇÃO
+  }
+  if (keys.d) {
+    player.velocidade.x = 5;
+    lastDirection = 'right'; // ATUALIZA DIREÇÃO
+  }
 }, 16);
