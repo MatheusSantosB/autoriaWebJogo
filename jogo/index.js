@@ -6,7 +6,7 @@ import { Heart } from './Classes/Heart.js';
 // Canvas
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
-canvas.width = 24 * 64;  // largura do mapa
+canvas.width = 24 * 64; // largura do mapa
 canvas.height = 16 * 64; // altura do mapa
 
 // Gravidade
@@ -35,43 +35,52 @@ class Colisao {
     this.width = width;
     this.height = height;
   }
-
-  draw() { // Desenhar bloco de colisão
+  draw() {
+    // Desenhar bloco de colisão
     c.fillStyle = 'rgba(0,0,255,0.3)';
     c.fillRect(this.x, this.y, this.width, this.height);
   }
 }
-
 const blocosColisao = dadosColisao.map(d => new Colisao(d));
 
 // Jogador
-const player = new Player({ x: 50, y: 50 });
+let player = new Player({ x: 50, y: 50 });
 player.width = 75;
 player.height = 100;
 player.velocidade = { x: 0, y: 1 };
 
 // Background
-const background = new Sprite({ position: { x: 0, y: 0 }, imageSrc: './img/mapa1.png' });
+const background = new Sprite({
+  position: { x: 0, y: 0 },
+  imageSrc: './img/mapa1.png'
+});
 
 // Teclas
 const keys = { a: false, d: false };
 
-
-// Vida
+// Vida (corações)
 const hearts = [
-  new Heart({ x: 10, y: 10, width: 32, height: 32 }),
-  new Heart({ x: 50, y: 10, width: 32, height: 32 }),
-  new Heart({ x: 90, y: 10, width: 32, height: 32 }),
-]
+  new Heart({ x: 10, y: 10, width: 55, height: 55 }),
+  new Heart({ x: 60, y: 10, width: 55, height: 55 }),
+  new Heart({ x: 110, y: 10, width: 55, height: 55 }),
+];
+hearts.forEach(h => h.depleted = false);
 
-const projectiles = []; // Array para guardar os projéteis
-let lastDirection = 'right'; // Para saber para onde atirar
+let vidas = hearts.length;
+let gameOver = false;
+
+// Inimigos (futuro)
+let eagles = [];
+let oposums = [];
+let sprites = [];
+
+const projectiles = [];
+let lastDirection = 'right';
 
 // Função de atualização do player com colisão
 function atualizarPlayer() {
   // Horizontal
   player.position.x += player.velocidade.x;
-
   blocosColisao.forEach(bloco => {
     if (
       player.position.x < bloco.x + bloco.width &&
@@ -79,7 +88,6 @@ function atualizarPlayer() {
       player.position.y < bloco.y + bloco.height &&
       player.position.y + player.height > bloco.y
     ) {
-      // Colisão horizontal
       if (player.velocidade.x > 0) player.position.x = bloco.x - player.width;
       else if (player.velocidade.x < 0) player.position.x = bloco.x + bloco.width;
     }
@@ -88,7 +96,6 @@ function atualizarPlayer() {
   // Vertical
   player.position.y += player.velocidade.y;
   player.velocidade.y += gravidade;
-
   blocosColisao.forEach(bloco => {
     if (
       player.position.x < bloco.x + bloco.width &&
@@ -96,7 +103,6 @@ function atualizarPlayer() {
       player.position.y < bloco.y + bloco.height &&
       player.position.y + player.height > bloco.y
     ) {
-      // Colisão vertical
       if (player.velocidade.y > 0) {
         player.position.y = bloco.y - player.height;
         player.velocidade.y = 0;
@@ -108,88 +114,168 @@ function atualizarPlayer() {
   });
 }
 
+// ------------------------- Funções de Vida e Game Over -------------------------
+function perderVida() {
+  for (let i = hearts.length - 1; i >= 0; i--) {
+    if (!hearts[i].depleted) {
+      hearts[i].depleted = true;
+      vidas--;
+      break;
+    }
+  }
+  if (vidas <= 0) showGameOver();
+}
+
+function showGameOver() {
+  gameOver = true;
+}
+
+function restartGame() {
+  init();
+}
+
+// -----------------------------------------------------------------------------------> 
+/* corações sumirem
+// TEM QUE ESTAR DENTRO D FUNÇÃO DE COLISÃO // TEM QUE ESTAR DENTRO D FUNÇÃO DE COLISÃO
+// TEM QUE ESTAR DENTRO D FUNÇÃO DE COLISÃO // TEM QUE ESTAR DENTRO D FUNÇÃO DE COLISÃO
+// do personagem const fullHearts = hearts.filter((heart) => {
+//   return !heart.depleted })
+// if (fullHearts.length > 0) {
+//   fullHearts[fullHearts.length - 1].depleted = true
+// } else if (fullHearts.length === 0) {
+//   init()
+// }
+// TEM QUE ESTAR DENTRO D FUNÇÃO DE COLISÃO // TEM QUE ESTAR DENTRO D FUNÇÃO DE COLISÃO
+// TEM QUE ESTAR DENTRO D FUNÇÃO DE COLISÃO // TEM QUE ESTAR DENTRO D FUNÇÃO DE COLISÃO
+// -----------------------------------------------------------------------------------> PARA CONSERTAR ESSA FUNÇÃO (DE REINICIAR) TEM QUE PEGAR TUDO O QUE FOI CRIADO DOS INIMIGOS E PERSONAGENS E AJUSTAR COM O QUE TEM AQUI E TEM QUE VERIFICAR COM A IA DE ACORDO COM O CÓDIGO QUE CRIAREM PORQUE TEM COISA AQUI QUE NÃO FOI CRIADA AINDA */
+
+// -----------------------------------------------------------------------------------> 
+// FUTURA FUNÇÃO DE REINÍCIO (QUANDO INIMIGOS FOREM ADICIONADOS)
+// TEM QUE PEGAR OS DADOS DOS INIMIGOS (Eagle, Oposum) E RECRIAR JUNTO
+// QUANDO FOREM CRIADAS AS CLASSES, AJUSTAR DENTRO DE init()
+// POR ENQUANTO, USAR A VERSÃO CORRIGIDA ABAIXO QUE FUNCIONA COM O PLAYER E CORAÇÕES
+// ----------------------------------------------------------------------------------->
+
+function init() {
+  // Reinicia o player
+  player = new Player({ x: 50, y: 50 });
+  player.width = 75;
+  player.height = 100;
+  player.velocidade = { x: 0, y: 1 };
+
+  // Reinicia os corações
+  hearts.length = 0;
+  hearts.push(
+    new Heart({ x: 10, y: 10, width: 55, height: 55 }),
+    new Heart({ x: 60, y: 10, width: 55, height: 55 }),
+    new Heart({ x: 110, y: 10, width: 55, height: 55 })
+  );
+  hearts.forEach(h => h.depleted = false);
+
+  // Futuros inimigos (exemplo de estrutura pronta)
+  eagles = [
+    // new Eagle({ x: 816, y: 172, width: 40, height: 41 }),
+  ];
+
+  oposums = [
+    // new Oposum({ x: 650, y: 100, width: 36, height: 28 }),
+    // new Oposum({ x: 906, y: 515, width: 36, height: 28 }),
+  ];
+
+  sprites = [];
+
+  vidas = hearts.length;
+  gameOver = false;
+}
+
 // Função de animação
 function animate() {
   requestAnimationFrame(animate);
   c.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Desenha o background
-  if (background.image.complete) {
-    c.drawImage(background.image, 0, 0);
+  // Tela de game over
+  if (gameOver) {
+    c.fillStyle = "rgba(0, 0, 0, 0.8)";
+    c.fillRect(0, 0, canvas.width, canvas.height);
+    c.fillStyle = "white";
+    c.font = "bold 80px Arial";
+    c.textAlign = "center";
+    c.fillText("GAME OVER", canvas.width / 2, canvas.height / 2 - 50);
+    c.fillStyle = "red";
+    c.fillRect(canvas.width / 2 - 150, canvas.height / 2 + 10, 300, 80);
+    c.fillStyle = "white";
+    c.font = "bold 40px Arial";
+    c.fillText("Reiniciar", canvas.width / 2, canvas.height / 2 + 65);
+    return;
   }
 
-  // Desenha as colisões (opcional, pode comentar esta linha)
+  // Fundo
+  if (background.image.complete) c.drawImage(background.image, 0, 0);
+
   blocosColisao.forEach(bloco => bloco.draw());
 
-  // --- ATUALIZAÇÃO DOS PROJÉTEIS ---
+  // Projéteis
   projectiles.forEach((projectile, index) => {
     projectile.update();
-
-    // Remover projéteis que saem da tela
-    if (
-      projectile.position.x + projectile.width < 0 ||
-      projectile.position.x > canvas.width
-    ) {
-      setTimeout(() => {
-        projectiles.splice(index, 1);
-      }, 0);
+    if (projectile.position.x + projectile.width < 0 || projectile.position.x > canvas.width) {
+      setTimeout(() => { projectiles.splice(index, 1); }, 0);
     }
   });
-  // ---------------------------------
 
-  // Atualiza e desenha o player
   atualizarPlayer();
   player.draw();
 
-  // Desenhar coração
- for (let i = hearts.length - 1; i >= 0; i--) {
-    const heart = hearts[i]
-    heart.draw(c)
+  // Desenhar corações
+  for (let i = hearts.length - 1; i >= 0; i--) {
+    const heart = hearts[i];
+    if (heart.depleted) {
+      c.save();
+      c.globalAlpha = 0.3;
+      heart.draw(c);
+      c.restore();
+    } else heart.draw(c);
   }
 }
-
 animate();
 
-// Eventos de teclado
+// Controles
 window.addEventListener('keydown', (e) => {
   if (e.key === 'a') keys.a = true;
   if (e.key === 'd') keys.d = true;
   if (e.key === 'w' && player.velocidade.y === 0) player.velocidade.y = -15;
 
-  // --- LÓGICA DE ATIRAR ---
-  if (e.key === ' ') { // Barra de espaço
+  if (e.key === ' ') {
     const projectileVelocity = (lastDirection === 'right') ? 10 : -10;
-    
     projectiles.push(
       new Projectile({
-        position: {
-          x: player.position.x + player.width / 2 - 10,
-          y: player.position.y + player.height / 2 - 2.5
-        },
-        velocity: {
-          x: projectileVelocity,
-          y: 0
-        }
+        position: { x: player.position.x + player.width / 2 - 10, y: player.position.y + player.height / 2 - 2.5 },
+        velocity: { x: projectileVelocity, y: 0 }
       })
     );
   }
-  // -------------------------
-});
 
+  // Testes
+  if (e.key === 'h') perderVida(); // tira 1 coração
+  if (e.key === 'g') showGameOver(); // força Game Over
+});
 window.addEventListener('keyup', (e) => {
   if (e.key === 'a') keys.a = false;
   if (e.key === 'd') keys.d = false;
 });
 
-// Atualiza velocidade horizontal com base nas teclas
 setInterval(() => {
   player.velocidade.x = 0;
-  if (keys.a) {
-    player.velocidade.x = -5;
-    lastDirection = 'left'; // ATUALIZA DIREÇÃO
-  }
-  if (keys.d) {
-    player.velocidade.x = 5;
-    lastDirection = 'right'; // ATUALIZA DIREÇÃO
-  }
+  if (keys.a) { player.velocidade.x = -5; lastDirection = 'left'; }
+  if (keys.d) { player.velocidade.x = 5; lastDirection = 'right'; }
 }, 16);
+
+// Clique para reiniciar
+canvas.addEventListener('click', (e) => {
+  if (!gameOver) return;
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+  if (mx >= canvas.width / 2 - 150 && mx <= canvas.width / 2 + 150 && my >= canvas.height / 2 + 10 && my <= canvas.height / 2 + 90) {
+    restartGame();
+  }
+});
