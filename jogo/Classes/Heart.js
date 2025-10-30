@@ -1,66 +1,39 @@
 export class Heart {
-  constructor({
-    x,
-    y,
-    width,
-    height,
-    imageSrc = './img/player.png',
-    spriteCropbox = {
-      x: 0,
-      y: 0,
-      width: 36,
-      height: 28,
-      frames: 6,
-    },
-  }) {
-    this.x = x
-    this.y = y
-    this.width = width
-    this.height = height
-    this.isImageLoaded = false
-    this.image = new Image()
+    constructor({ x, y, width, height, imageSrc }) {
+        this.position = { x, y };
+        this.width = width;
+        this.height = height;
+        this.imageSrc = imageSrc;
+        this.depleted = false; // Se o coração foi perdido
 
-    this.image.onload = () => {
-      this.isImageLoaded = true
-      console.log('Coração carregou')
+        this.isImageLoaded = false;
+        this.image = new Image();
+        this.image.onload = () => { this.isImageLoaded = true; };
+        this.image.src = imageSrc;
     }
 
-    this.image.onerror = () => {
-      console.error(' Erro ao carregar a imagem do coração:', imageSrc)
+    draw(c) {
+        if (this.depleted) return; // Não desenha corações perdidos
+
+        if (this.isImageLoaded) {
+            // --- CORREÇÃO ---
+            // Desenha a imagem inteira (this.image.width/height)
+            // no tamanho definido (this.width/height)
+            c.drawImage(
+                this.image,
+                0, // cropX
+                0, // cropY
+                this.image.width,  // cropWidth (usa a largura total da imagem)
+                this.image.height, // cropHeight (usa a altura total da imagem)
+                this.position.x,   // Posição X no canvas
+                this.position.y,   // Posição Y no canvas
+                this.width,        // Tamanho (32)
+                this.height        // Tamanho (32)
+            );
+        } else {
+            // Fallback
+            c.fillStyle = 'red';
+            c.fillRect(this.position.x, this.position.y, this.width, this.height);
+        }
     }
-
-    this.image.src = imageSrc
-    this.currentFrame = 0
-    this.currentSprite = spriteCropbox
-    this.depleted = false
-  }
-
-  draw(c) {
-    // Para verificar se o coração está carregado
-    console.log("Desenhando coração...", this.isImageLoaded)
-
-    if (this.isImageLoaded) {
-      let xScale = 1
-      let x = this.x
-
-      if (this.depleted) {
-        this.currentFrame = 1
-      }
-
-      c.save()
-      c.scale(xScale, 1)
-      c.drawImage(
-        this.image,
-        this.currentSprite.x + this.currentSprite.width * this.currentFrame,
-        this.currentSprite.y,
-        this.currentSprite.width,
-        this.currentSprite.height,
-        x,
-        this.y,
-        this.width,
-        this.height,
-      )
-      c.restore()
-    }
-  }
 }

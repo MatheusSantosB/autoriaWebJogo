@@ -1,3 +1,4 @@
+// Classe para os sprites de fundo (cenário)
 export class Sprite {
   constructor({ position, imageSrc }) {
     this.position = position;
@@ -5,9 +6,9 @@ export class Sprite {
     this.image.src = imageSrc;
   }
 
-  draw() {
-    const canvas = document.querySelector('canvas');
-    const c = canvas.getContext('2d');
+  // Método de desenho (agora recebe 'c')
+  draw(c) {
+    // Desenha a imagem no canvas (apenas se já estiver carregada)
     if (this.image.complete) {
       c.drawImage(this.image, this.position.x, this.position.y);
     }
