@@ -57,10 +57,10 @@ function init() {
   blocosColisao = dadosColisao.map(d => new Colisao(d));
   
   player = new Player({
-    x: 80, y: 80,
+    x: 60, y: 60,
     width: 100, height: 100,
     imageSrc: './img/player2.png', 
-    scale: 1.3
+    scale: 1
   });
 
   background = new Sprite({ position: { x: 0, y: 0 }, imageSrc: './img/mapa1.png' });
@@ -77,21 +77,21 @@ function init() {
   enemies = [
     new ScoutEnemy({
       x: 700, y: 700,
-      width: 200, height: 200,
+      width: 180, height: 150,
       imageSrc: './img/Skeleton_01_Yellow_Walk.png',
       spriteCropbox: { frames: 10 }, 
-      moveSpeed: 1, framesHold: 6 
+      moveSpeed: 1.6, framesHold: 6 
     }),
     new RandomWalkerEnemy({
-      x: 900, y: 200,
-      width: 140, height: 170,
+      x: 450, y: 100,
+      width: 112, height: 112,
       imageSrc: './img/Mushroom-Run.png',
       spriteCropbox: { frames: 8 }, 
-      moveSpeed: 1.5, framesHold: 8
+      moveSpeed: 2.3, framesHold: 8
     }),
     new JumperEnemy({
       x: 1100, y: 200,
-      width: 180, height: 180,
+      width: 160, height: 160,
       imageSrc: './img/Enemy3No-Move-Fly.png', 
       spriteCropbox: { frames: 8 }, 
       moveSpeed: 3, framesHold: 10
