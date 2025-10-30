@@ -16,9 +16,7 @@ export class Heart {
         if (this.depleted) return; // Não desenha corações perdidos
 
         if (this.isImageLoaded) {
-            // --- CORREÇÃO ---
-            // Desenha a imagem inteira (this.image.width/height)
-            // no tamanho definido (this.width/height)
+            
             c.drawImage(
                 this.image,
                 0, // cropX

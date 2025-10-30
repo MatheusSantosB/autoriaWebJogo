@@ -2,7 +2,7 @@ export class Projectile {
     constructor({ position, velocity, imageSrc = './img/arrow.png' }) {
         this.position = position;
         this.velocity = velocity;
-        this.width = 30; // Ajuste para o tamanho da sua flecha
+        this.width = 50; // Ajuste para o tamanho da sua flecha
         this.height = 10; // Ajuste para o tamanho da sua flecha
 
         this.isImageLoaded = false;
@@ -11,7 +11,7 @@ export class Projectile {
         this.image.src = imageSrc;
     }
 
-    // --- CORRIGIDO ---
+   
     // 'c' (context) é passado como parâmetro
     draw(c) {
         if (this.isImageLoaded) {
@@ -31,7 +31,7 @@ export class Projectile {
         }
     }
 
-    // --- CORRIGIDO ---
+   
     // 'c' (context) é passado como parâmetro
     update(c) {
         this.draw(c); // Passa 'c' para a função draw

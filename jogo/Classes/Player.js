@@ -31,11 +31,11 @@ export class Player {
         this.spriteCropbox = { width: 64, height: 64, frames: 1 }; 
     }
     this.image.src = imageSrc
-
+    // animação de ficar parado, andar, atirar, tomar dano e morrer. 
     this.animations = {
-        idle: { row: 1, frames: 4, framesHold: 10, loop: true },
+        idle: { row: 0, frames: 4, framesHold: 10, loop: true },
         walk: { row: 2, frames: 6, framesHold: 8, loop: true },     
-        shoot: { row: 0, frames: 8, framesHold: 5, loop: false },
+        shoot: { row: 1, frames: 8, framesHold: 5, loop: false },
         takeDamage: { row: 3, frames: 3, framesHold: 8, loop: false }, 
         die: { row: 4, frames: 4, framesHold: 10, loop: false }        
     };

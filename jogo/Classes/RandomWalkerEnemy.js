@@ -25,7 +25,7 @@ export class RandomWalkerEnemy extends Enemy {
     }
   }
 
-  // --- CORREÇÃO (Sprite Invertido) ---
+ 
   // Sobrescreve a função 'draw' para inverter a lógica do sprite
   draw(c, DEBUG_MODE) {
     if (this.isImageLoaded) {

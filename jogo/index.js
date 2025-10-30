@@ -263,8 +263,8 @@ window.addEventListener('keydown', (e) => {
     projectiles.push(
       new Projectile({
         position: {
-          x: player.position.x + (player.lastDirection === 'right' ? player.width - 10 : 10) - 15,
-          y: player.position.y + player.height / 2 - 5 
+          x: player.position.x + (player.lastDirection === 'right' ? player.width - 10 : 10) - 100,
+          y: player.position.y + player.height / 2 + 9.7
         },
         velocity: { x: projectileVelocity, y: 0 }
       })

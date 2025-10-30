@@ -9,7 +9,7 @@ export class Enemy {
     spriteCropbox, // Configuração do spritesheet
     moveSpeed = 1,
     framesHold = 10,
-    scale = 1.0 // <-- CORRIGIDO: Escala padrão é 1 (sem aumento)
+    scale = 1.0 
   }) {
     // Posição e Hitbox
     this.position = { x, y }
@@ -51,7 +51,7 @@ export class Enemy {
 
   // Método de IA (será implementado por cada classe filha)
   handleAI() {
-    // ...
+    
   }
 
   // Método de atualização (chamado a cada frame)
