@@ -169,7 +169,7 @@ function animate() {
         currentTime - lastDamageTime > DAMAGE_COOLDOWN &&
         checkCollision(player, enemy)) {
       
-      console.log("COLISÃO DETECTADA! Aplicando dano...");
+      console.log("Colisão detectada");
       
       // Aplica dano
       player.takeDamage(enemy.damage);
@@ -203,7 +203,7 @@ function animate() {
       const enemy = enemies[j];
       
       if (checkCollision(projectile, enemy)) {
-        console.log("PROJÉTIL ACERTOU INIMIGO!");
+        console.log("Projétil acertou o inimigo");
         projectiles.splice(i, 1);
         enemies.splice(j, 1);
         break;
