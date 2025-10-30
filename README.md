@@ -1,10 +1,13 @@
 Projeto: Jogo de Plataforma 2D em JavaScript
+
 📖 Sobre o Projeto
+
 Este é um protótipo de um jogo de plataforma 2D desenvolvido inteiramente com HTML5 Canvas e JavaScript puro (ES6+).
 
 O jogador controla um arqueiro que deve navegar por um cenário, pular em plataformas e derrotar diferentes tipos de inimigos para vencer. O projeto é estruturado com Classes JavaScript, separando a lógica do jogador, inimigos, projéteis e elementos de cenário.
 
 🚀 Funcionalidades
+
 Movimentação de Personagem: O jogador pode andar (esquerda/direita) e pular.
 
 Sistema de Combate: O jogador pode atirar flechas para derrotar os inimigos.
@@ -37,6 +40,7 @@ Barra de Espaço: Atirar flecha
 Enter: Reiniciar o jogo (após Game Over ou Vitória)
 
 💻 Como Executar
+
 Como este projeto utiliza Módulos JavaScript (import/export), ele precisa ser executado a partir de um servidor local. Abrir o arquivo index.html diretamente no navegador (protocolo file://) não funcionará.
 
 Clone ou baixe este repositório.
@@ -52,6 +56,7 @@ No terminal, dentro da pasta jogo/, execute: python -m http.server
 Abra seu navegador e acesse http://localhost:8000 (ou o endereço fornecido pelo seu servidor).
 
 🛠️ Tecnologias Utilizadas
+
 HTML5
 
 CSS3
